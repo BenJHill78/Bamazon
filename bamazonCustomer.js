@@ -20,43 +20,73 @@ connection.connect(function(err){
 });
     connection.query("Select item_id, product_name, price from products", function(err, res){
     if (err) throw err;
-        console.table(res);
+      console.table(res);
       runSearch();      
       
    }); 
 
 function runSearch() {
+      connection.query("Select item_id from products", function(err, res){
+    if (err) throw err;
+          
   inquire
     .prompt([
       {
       name: "action",
-      message: "What is the product you would like to purchase?",
-   
-      },
-
-            ])
-};
-
-            
-    /*.then(function(answer) {
-      var query = "SELECT item_id, product_name, department_name, price, stock_quantity FROM bamazon_db WHERE position BETWEEN ? AND ?";
-      connection.query(query, [answer.start, answer.end], function(err, res) {
-        for (var i = 0; i < res.length; i++) {
-          console.log(
-            "item_id: " +
-              res[i].id +
-              " || product_name: " +
-              res[i].product +
-              " || department_name: " +
-              res[i].department +
-              " || price: " +
-              res[i].price +
-               " || stock_quantity: " +
-              res[i].stock             
-          );
+      type: "input",
+      message: "What is the product number of the item you would like to purchase?",
+        validate: function(item){
+          for(var i = 0; i <res.length; i++){
+            if(item == res[i].item_id){
+                return true;
+            }
         }
+        
+            return "Please select a correct item_id";
+        }
+      },
+      
+            {
+      name: "amount",
+      type: "input",
+      message: "How many would you like?",
+        validate: function(input){
+            if(input % 1 == 0 && input > 0){
+                    return true;
+                }
+                else{
+                    return false;
+                }
+            }
+        }
+         ])
+    .then(function(answer) {
+      var query = "SELECT item_id, product_name, price, stock_quantity FROM products WHERE item_id = " + answer.action;
+            val(answer.action, answer.amount);
+          });
+      })
+        }
+      function val (selectId, selectQuantity){
+         connection.query("Select stock_quantity from products WHERE item_id = " + selectId, function(err, res){
+    if (err) throw err;
+      
+            if(selectQuantity <= res[0].stock_quantity){
+                connection.query ("update products set stock_quantity = stock_quantity - " + selectQuantity, function (err, res){
+       if (err) throw err;               
+                      }) 
+                total(selectId, selectQuantity);
+            }
+             else{
+                 console.log ("Unable to fill the order.");
+             }
+          })
+}
+function total(selectedItem, SelectedQuantity){
+    connection.query ("Select price from products WHERE item_id = " + selectedItem, function (err, res){
+        if (err) throw err;
+        var totalCost;
+        totalCost = res[0].price * SelectedQuantity;
+        console.log(totalCost);
         runSearch();
-      });
-    });
-      }*/
-
+    })
+ }
