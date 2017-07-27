@@ -1,8 +1,11 @@
+
+    //variables requiring npm packages//
 var Table = require("console.table");
 var prompt = require("prompt");
 var inquire = require("inquirer");
 var mysql = require("mysql");
 
+    //create connection to DB//
 var connection = mysql.createConnection({
     
     host: "localhost",
@@ -13,11 +16,13 @@ var connection = mysql.createConnection({
     database: "bamazon_db"
     })
 
+    //with the connection if connected give connection id, or throw error if there is one//
 connection.connect(function(err){
     if (err) throw err;
     console.log("connected as id " + 
     connection.threadId);
 });
+    //get the id, name and price from the products table//
     connection.query("Select item_id, product_name, price from products", function(err, res){
     if (err) throw err;
       console.table(res);
@@ -25,6 +30,7 @@ connection.connect(function(err){
       
    }); 
 
+    //ask the user for the id they want to purchase and verify it exsists//
 function runSearch() {
       connection.query("Select item_id from products", function(err, res){
     if (err) throw err;
@@ -34,18 +40,18 @@ function runSearch() {
       {
       name: "action",
       type: "input",
-      message: "What is the product number of the item you would like to purchase?",
+      message: "What is the Item ID of the item you would like to purchase?",
         validate: function(item){
           for(var i = 0; i <res.length; i++){
             if(item == res[i].item_id){
                 return true;
             }
         }
-        
+            // If it doesn't exist throw error//
             return "Please select a correct item_id";
         }
       },
-      
+            //Ask how many they want to purchase//
             {
       name: "amount",
       type: "input",
@@ -60,12 +66,15 @@ function runSearch() {
             }
         }
          ])
+          
+          //select id, name, price and quantity using the id entered by the user//
     .then(function(answer) {
       var query = "SELECT item_id, product_name, price, stock_quantity FROM products WHERE item_id = " + answer.action;
             val(answer.action, answer.amount);
           });
       })
         }
+        //validate the quantity selected.//
       function val (selectId, selectQuantity){
          connection.query("Select stock_quantity from products WHERE item_id = " + selectId, function(err, res){
     if (err) throw err;
@@ -81,6 +90,7 @@ function runSearch() {
              }
           })
 }
+        //show the total price for all items//
 function total(selectedItem, SelectedQuantity){
     connection.query ("Select price from products WHERE item_id = " + selectedItem, function (err, res){
         if (err) throw err;
