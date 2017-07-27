@@ -11,24 +11,24 @@ Once the purchase is made the database will be updated with the item(s) removed 
 
 To get the customers to be able to purchase we must first create a MySQL Database using the file bamazon_db.sql.
 
-<a href="dbcreate.jpg"><img src="dbcreate.jpg" alt="dbcreation" height="40" width="40" /></a>
+<img src="dbcreate.jpg" alt="dbcreation" height="40" width="40" />
 
 
 Then create a bamazonCustomer.js file for the customer code and connect it to the DB and show the connected id along with the products.
 
-<a href="dbconnect.jpg"><img src="dbconnect.jpg" alt="dbconnection" height="40" width="40" /></a>
+<img src="dbconnect.jpg" alt="dbconnection" height="40" width="40" />
 
 
 Show the Customer the products and asks them to select the ID.  If there is no id with that number it will ask them to select a correct item_id
 
-<a href="idselect.jpg"><img src="idselect.jpg" alt="idselection" height="40" width="40" /></a>
+<img src="idselect.jpg" alt="idselection" height="40" width="40" />
 
 
 Ask the user how many they want. If they choose the number higher than the remaining stock throw an error.
 
-<a href="amountselect.jpg"><img src="amountselect.jpg" alt="amountselection" height="40" width="40" /></a>
+<img src="amountselect.jpg" alt="amountselection" height="40" width="40" />
 
 
 The full screen showing selections and price.
 
-<a href="finished.jpg"><img src="finished.jpg" alt="finished" height="40" width="40" /></a>
+<img src="finished.jpg" alt="finished" height="40" width="40" />
